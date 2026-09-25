@@ -1,4 +1,4 @@
-# WFF3D research code
+# WFF3D: Watermarking Feed-Forward 3D Gaussian Splatting Models
 
 WFF3D watermarks the Gaussian-generation path of feed-forward 3DGS models.
 This repository contains the method and integration code for AnySplat,
