@@ -1,0 +1,8 @@
+name: wff3d
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - cmake
+  - ninja

@@ -1,0 +1,55 @@
+# @package _global_
+
+defaults:
+  - /dataset@_group_.dl3dv: dl3dv_360
+  - override /model/encoder: yonosplat
+  - override /model/encoder/backbone: local_global
+  - override /loss: [mse, lpips, opacity, intrinsic, pose]
+
+wandb:
+  name: dl3dv
+  tags: [dl3dv, 224x224]
+
+model:
+  encoder:
+    name: yonosplat
+    pose_free: true
+    pretrained_weights: './pretrained_weights/pi3.safetensors'
+    gt_pose_sampling_decay_start_step: 80000
+    gt_pose_sampling_decay_end_step: 100000
+    gt_pose_final_sample_ratio: 0.9
+    backbone:
+      predict_intrinsics: true
+  decoder:
+    make_scale_invariant: true
+
+dataset:
+  dl3dv:
+    input_image_shape: [ 224, 224 ]
+    pose_norm_method: max_pairwise_d
+    view_sampler:
+      warm_up_steps: 75000
+      num_context_views: 6
+      initial_min_distance_between_context_views: 15
+      initial_max_distance_between_context_views: 30
+      min_distance_between_context_views: 20
+      max_distance_between_context_views: 50
+
+optimizer:
+  lr: 2e-4
+  warm_up_steps: 1000
+  backbone_lr_multiplier: 0.1
+
+data_loader:
+  train:
+    batch_size: 1
+
+trainer:
+  max_steps: 150001
+  val_check_interval: 7500
+
+train:
+  train_ignore_large_loss_after_steps: 20000
+
+checkpointing:
+  every_n_train_steps: 7500
